@@ -1,4 +1,4 @@
- varying vec3 Normal;
+varying vec3 Normal;
 varying vec3 Position;
 
 uniform vec3 Ka;
@@ -9,10 +9,11 @@ uniform vec3 LightIntensity;
 uniform float Shininess;
 
 vec3 phong() {
-    vec3 n = normalize(Normal);
-    vec3 s = normalize(vec3(LightPosition) - Position);
-    vec3 v = normalize(vec3(-Position));
-    vec3 r = reflect(-s, n);
+    vec4 lightPos = viewMatrix * LightPosition; // light position in view space
+    vec3 n = normalize(Normal); // normalized normal
+    vec3 s = normalize(vec3(lightPos) - Position); // vector from light to object
+    vec3 v = normalize(vec3(-Position)); // vector from camera to object
+    vec3 r = reflect(-s, n); // vector of reflected light
 
     vec3 ambient = Ka;
     vec3 diffuse = Kd * max(dot(s, n), 0.0);
